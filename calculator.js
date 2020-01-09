@@ -1,11 +1,3 @@
-<<<<<<< HEAD
-let displayValue = "0";
-let storeValues = [];
-let pendingValue;
-
-=======
-<<<<<<< Updated upstream
-=======
 let displayValue = "0";
 let storeValues = [];
 let pendingValue;
@@ -77,39 +69,14 @@ const clear = () => {
         }
         $("#display__numbers").text(displayValue);
     }
->>>>>>> Jquery
 
 
 //prevent code from running before doc is all loaded
 $(function() {
-<<<<<<< HEAD
-    let numberBtn = $(".numbers");
-    for (let i = 0; i < numberBtn.length; i++) {
-        numberBtn[i].click((event) => {
-            let btnClicked = numberBtn..event.target.text();
-            if (displayValue === "0") {
-                displayValue = "";
-            }
-            displayValue += btnClicked;
-            $("#display__numbers").innerText = displayValue;
-            console.log(btnClicked);
-            console.log(displayValue)
-        })
-    }
-
-    $("#decimal").click(function () { 
-        alert("Hello");
-        console.log("hello")
-        
-    });
-    
-})
-=======
     $(".numbers").on("click", updateDisplay);    
     $(".operator").on("click", operators);
     $("#clear").on("click", clear);    
     $("#decimal").on("click", decimal);
-
+    
 })
->>>>>>> Stashed changes
->>>>>>> Jquery
+
