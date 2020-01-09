@@ -7,19 +7,7 @@
   width: 350px;
 }
 
-<<<<<<< HEAD
-.numbers-keys {
-=======
-<<<<<<< Updated upstream
-.numbers-keys{
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    grid-gap: 20px;
-    padding: 20px;
-}   
-=======
 .keys {
->>>>>>> Jquery
   display: -ms-grid;
   display: grid;
   -ms-grid-columns: (1fr)[4];
@@ -27,10 +15,6 @@
   grid-gap: 20px;
   padding: 20px;
 }
-<<<<<<< HEAD
-=======
->>>>>>> Stashed changes
->>>>>>> Jquery
 
 .two-columns, .clear {
   -ms-grid-column: 1;
