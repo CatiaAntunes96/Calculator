@@ -6,23 +6,12 @@
     width: 350px;
 }   
 
-<<<<<<< Updated upstream
-.numbers-keys{
+.keys{
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     grid-gap: 20px;
     padding: 20px;
 }   
-=======
-.keys {
-  display: -ms-grid;
-  display: grid;
-  -ms-grid-columns: (1fr)[4];
-      grid-template-columns: repeat(4, 1fr);
-  grid-gap: 20px;
-  padding: 20px;
-}
->>>>>>> Stashed changes
 
 .two-columns {
     grid-column: 1 / 3;
