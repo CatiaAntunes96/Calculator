@@ -1,3 +1,7 @@
+body {
+  margin: 0px;
+}
+
 .container {
   position: absolute;
   top: 50%;
@@ -5,6 +9,14 @@
   -webkit-transform: translate(-50%, -50%);
           transform: translate(-50%, -50%);
   width: 350px;
+  background-color: hotpink;
+}
+
+.display {
+  text-align: end;
+  background-color: white;
+  margin: 0px 15px;
+  padding: 0px 10px;
 }
 
 .keys {
