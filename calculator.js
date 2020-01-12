@@ -6,6 +6,9 @@ let result;
 
 const updateSecondDisplay = (e) => {
     let btnClicked = $(e.target).text();
+    if (value === "0") {
+        value = "";
+    }
     value += btnClicked;
     $("#pendingValue").text(value);
 }
@@ -66,11 +69,13 @@ const operators = (e) => {
 
 const clear = () => {
     displayValue = "0";
-    value="";
+    value="0";
     pendingValue = undefined;
     storeValues = [];
     $("#display__numbers").text(displayValue);
     $("#pendingValue").text(value);
+    $(".numbers-click").removeClass("numbers-click");
+    $(".operator-click").removeClass("operator-click");
 }
 
 const decimal =() => {
@@ -80,7 +85,6 @@ const decimal =() => {
     $("#display__numbers").text(displayValue);
 }
 
-
 //prevent code from running before doc is all loaded
 $(function() {
     $(".numbers").on("click", updateDisplay);    
@@ -88,5 +92,13 @@ $(function() {
     $("#clear").on("click", clear);    
     $("#decimal").on("click", decimal);
     $(".btn").on("click", updateSecondDisplay);
+    $(".numbers").on("click", function () {
+        $(".numbers-click").removeClass("numbers-click");
+        $(this).addClass("numbers-click");
+    })
+    $(".operator").on("click", function() {
+        $(".operator-click").removeClass("operator-click");
+        $(this).addClass("operator-click")
+    })
 })
 
