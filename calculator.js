@@ -1,17 +1,15 @@
 let displayValue = "0";
 let value = "";
 let storeValues = [];
+let storeNumbers = [];
 let pendingValue;
 let result;
 const operatorSignals = ["+", "*", "/", "-"];
 
 const updateSecondDisplay = (e) => {
     let btnClicked = $(e.target).text();
-    if (value === "0") {
-        value = "";
-    }
-    value += btnClicked;
-    $("#pendingValue").text(value);
+    updateStore(btnClicked);
+    
 }
 
 const updateDisplay = (e) => {
@@ -19,9 +17,19 @@ const updateDisplay = (e) => {
     if (displayValue === "0") {
         displayValue = "";
     }
-    displayValue += numberClicked;
+    storeNumbers.push(numberClicked);
+    displayValue = storeNumbers[storeNumbers.length - 1];
     $("#display__numbers").text(displayValue);
-    
+}
+
+const updateStore = (key) => {
+    value = "";
+    storeValues.push(`${key}`);
+    if (value === "0") {
+        value = "";
+    }
+    value = storeValues.join("");
+    $("#pendingValue").text(value);
 }
 
 const operatorAction = (operatorText) => {
@@ -30,8 +38,8 @@ const operatorAction = (operatorText) => {
     }
     pendingValue = displayValue;
     displayValue = "0";
-    storeValues.push(pendingValue);
-    storeValues.push(` ${operatorText} `);
+    //storeValues.push(pendingValue);
+    //storeValues.push(` ${operatorText} `);
     $("#display__numbers").text(displayValue);
 }
 
@@ -41,12 +49,14 @@ const operators = (e) => {
     if(checkForDoubleSignal() && operatorBtn != "-"){
         removeLastSignal();
     }
-  
+    
     if (operatorBtn !== "=") {
         operatorAction(operatorBtn)
     }else {
-        storeValues.push(displayValue);
-        console.log(storeValues)
+        //storeValues.push(displayValue);
+        if (checkForDoubleSignal() && storeValues[storeValues.length - 1] == "-") {
+            removeLastSignal();
+        }
         result = eval(storeValues.join(" "));
         displayValue = result + "";
         $("#display__numbers").text(displayValue);
@@ -55,13 +65,13 @@ const operators = (e) => {
 }
 
 const checkForDoubleSignal = () =>{
-    const lastSignal =  $("#pendingValue").text().slice(-1);
+    const lastSignal =  storeValues[storeValues.length - 1];
     return operatorSignals.includes(lastSignal);
 }
 
 const removeLastSignal = () =>{
     //update displayed text
-    $("#pendingValue").text($("#pendingValue").text().slice(-1))
+    $("#pendingValue").text(storeValues.join(""))
 
     //remove last index in storValues
     storeValues.pop();
@@ -72,6 +82,7 @@ const clear = () => {
     value="0";
     pendingValue = undefined;
     storeValues = [];
+    storeNumbers = [];
     $("#display__numbers").text(displayValue);
     $("#pendingValue").text(value);
     $(".numbers-click").removeClass("numbers-click");
