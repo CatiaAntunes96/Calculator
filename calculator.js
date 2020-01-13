@@ -3,6 +3,7 @@ let value = "";
 let storeValues = [];
 let pendingValue;
 let result;
+const operatorSignals = ["+", "*", "/", "-"];
 
 const updateSecondDisplay = (e) => {
     let btnClicked = $(e.target).text();
@@ -20,51 +21,50 @@ const updateDisplay = (e) => {
     }
     displayValue += numberClicked;
     $("#display__numbers").text(displayValue);
-    console.log(numberClicked)
     
+}
+
+const operatorAction = (operatorText) => {
+    if (displayValue === "0") {
+        displayValue = "";
+    }
+    pendingValue = displayValue;
+    displayValue = "0";
+    storeValues.push(pendingValue);
+    storeValues.push(` ${operatorText} `);
+    $("#display__numbers").text(displayValue);
 }
 
 const operators = (e) => {
     let operatorBtn = $(e.target).text();
-    console.log(operatorBtn);
-    switch(operatorBtn) {
-        case ("+"):
-        pendingValue = displayValue;
-        displayValue = "0";
-        storeValues.push(pendingValue);
-        storeValues.push(" + ");
-        $("#display__numbers").text(displayValue);
-        break;
-        case ("-"):
-        pendingValue = displayValue;
-        displayValue = "0";
-        storeValues.push(pendingValue);
-        storeValues.push(" - ");
-        $("#display__numbers").text(displayValue);
-        break;
-        case ("*"):
-        pendingValue = displayValue;
-        displayValue = "0";
-        storeValues.push(pendingValue);
-        storeValues.push(" * ");
-        $("#display__numbers").text(displayValue);
-        break;
-        case ("/"):
-        pendingValue = displayValue;
-        displayValue = "0";
-        storeValues.push(pendingValue);
-        storeValues.push(" / ");
-        $("#display__numbers").text(displayValue);
-        break;
-        case ("="):
+
+    if(checkForDoubleSignal() && operatorBtn != "-"){
+        removeLastSignal();
+    }
+  
+    if (operatorBtn !== "=") {
+        operatorAction(operatorBtn)
+    }else {
         storeValues.push(displayValue);
+        console.log(storeValues)
         result = eval(storeValues.join(" "));
         displayValue = result + "";
         $("#display__numbers").text(displayValue);
         storeValues = [];
-        default:
-        break;
     }
+}
+
+const checkForDoubleSignal = () =>{
+    const lastSignal =  $("#pendingValue").text().slice(-1);
+    return operatorSignals.includes(lastSignal);
+}
+
+const removeLastSignal = () =>{
+    //update displayed text
+    $("#pendingValue").text($("#pendingValue").text().slice(-1))
+
+    //remove last index in storValues
+    storeValues.pop();
 }
 
 const clear = () => {
