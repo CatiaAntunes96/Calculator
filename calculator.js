@@ -1,15 +1,16 @@
 let displayValue = "0";
 let value = "";
 let storeValues = [];
-let storeNumbers = [];
 let pendingValue;
-let result;
-const operatorSignals = ["+", "*", "/", "-"];
+let result; //contains the final array
+let strStoreValues; //transform array storeValues to string
+let resultStr; //will contain the final str to check
+let withoutSubstract; //willk contain the block without subtractor if subtractor is the last operator
+const operatorReg = /(\+|-|\*|\/){2,}/
 
 const updateSecondDisplay = (e) => {
     let btnClicked = $(e.target).text();
-    updateStore(btnClicked);
-    
+    updateStore(btnClicked);  
 }
 
 const updateDisplay = (e) => {
@@ -17,9 +18,8 @@ const updateDisplay = (e) => {
     if (displayValue === "0") {
         displayValue = "";
     }
-    storeNumbers.push(numberClicked);
-    displayValue = storeNumbers[storeNumbers.length - 1];
-    $("#display__numbers").text(displayValue);
+    displayValue += numberClicked;
+    $("#display").text(displayValue);
 }
 
 const updateStore = (key) => {
@@ -37,44 +37,45 @@ const operatorAction = (operatorText) => {
         displayValue = "";
     }
     pendingValue = displayValue;
+    console.log(pendingValue)
     displayValue = "0";
-    //storeValues.push(pendingValue);
-    //storeValues.push(` ${operatorText} `);
-    $("#display__numbers").text(displayValue);
+    $("#display").text(displayValue);
 }
 
 const operators = (e) => {
     let operatorBtn = $(e.target).text();
-
-    if(checkForDoubleSignal() && operatorBtn != "-"){
-        removeLastSignal();
-    }
     
     if (operatorBtn !== "=") {
         operatorAction(operatorBtn)
-    }else {
-        //storeValues.push(displayValue);
-        if (checkForDoubleSignal() && storeValues[storeValues.length - 1] == "-") {
-            removeLastSignal();
-        }
-        result = eval(storeValues.join(" "));
+    } else {
+        checkForDoubleSignal();
+        result = eval(resultStr);
         displayValue = result + "";
-        $("#display__numbers").text(displayValue);
+        $("#display").text(displayValue);
         storeValues = [];
+        pendingValue = result;
+        storeValues.push(pendingValue)
     }
 }
 
 const checkForDoubleSignal = () =>{
-    const lastSignal =  storeValues[storeValues.length - 1];
-    return operatorSignals.includes(lastSignal);
-}
-
-const removeLastSignal = () =>{
-    //update displayed text
-    $("#pendingValue").text(storeValues.join(""))
-
-    //remove last index in storValues
-    storeValues.pop();
+    let strStoreValues = storeValues.join("");
+    let matchSignal = strStoreValues.match(operatorReg);
+    if (matchSignal != null) {
+        let signal = matchSignal[0].toString(); //convert the block to string
+        console.log(signal)
+        console.log(signal[signal.length - 1])
+        if (signal[signal.length - 1] !== " - ") {
+            resultStr = strStoreValues.replace(signal, matchSignal[matchSignal.length - 1])
+        } 
+        if (signal[signal.length - 1] === "-") {
+            withoutSubstract = signal.slice(0, signal.length - 1) //remove "-" from the block
+            resultStr = strStoreValues.replace(withoutSubstract, withoutSubstract[withoutSubstract.length - 1]); //replaces de the consecutive operators with the latest one
+        }
+        
+    } else {
+        resultStr = strStoreValues;
+    }
 }
 
 const clear = () => {
@@ -82,8 +83,7 @@ const clear = () => {
     value="0";
     pendingValue = undefined;
     storeValues = [];
-    storeNumbers = [];
-    $("#display__numbers").text(displayValue);
+    $("#display").text(displayValue);
     $("#pendingValue").text(value);
     $(".numbers-click").removeClass("numbers-click");
     $(".operator-click").removeClass("operator-click");
@@ -93,7 +93,7 @@ const decimal =() => {
     if (!displayValue.includes(".")) {
         displayValue += ".";
     }
-    $("#display__numbers").text(displayValue);
+    $("#display").text(displayValue);
 }
 
 //prevent code from running before doc is all loaded
@@ -112,4 +112,3 @@ $(function() {
         $(this).addClass("operator-click")
     })
 })
-
